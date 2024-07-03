@@ -37,7 +37,7 @@ LOCAL_APPS = [
     "apps.adawatseo",
 ]
 THIRD_PARTY_APPS = [
-    "rest_framework",
+    "rest_framework","corsheaders",
 ]
 INSTALLED_APPS = DJANGO_COMMON_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -46,6 +46,7 @@ SITE_ID = 1
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -119,3 +120,9 @@ STATIC_URL = "/static/"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# CORS ORIGINS
+CORS_ALLOWED_ORIGINS = [
+    "https://adawatseo.net",
+    "http://localhost:3000",
+]
