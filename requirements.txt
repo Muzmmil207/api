@@ -1,0 +1,6 @@
+Django
+django-environ
+djangorestframework
+requests
+gunicorn
+whitenoise
