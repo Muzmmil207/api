@@ -43,11 +43,13 @@ class TextToPDFView(APIView):
         text = request.data.get("files")
 
         if not text:
-            return Response(
-                {"error": "No Text content uploaded"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-        text = text.read().decode("utf-8")
+            text = request.data.get("plainText")
+            if not text:
+                return Response(
+                    {"error": "No Text content uploaded"}, status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            text = text.read().decode("utf-8")
 
         # PDF generation logic
         pdf_buffer = io.BytesIO()
