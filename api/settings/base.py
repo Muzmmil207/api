@@ -38,6 +38,8 @@ LOCAL_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "rest_framework","corsheaders",
+    "ckeditor",
+
 ]
 INSTALLED_APPS = DJANGO_COMMON_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -59,7 +61,7 @@ ROOT_URLCONF = "api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -126,3 +128,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://adawatseo.net",
     "http://localhost:3000",
 ]
+
+# ckeditor configurations
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+        "height": 300,
+        "width": "100%",
+    },
+}
