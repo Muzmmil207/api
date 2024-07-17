@@ -124,10 +124,11 @@ STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # CORS ORIGINS
-CORS_ALLOWED_ORIGINS = [
-    "https://adawatseo.net",
-    "http://localhost:3000",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://adawatseo.net",
+#     "http://localhost:3000",
+# ]
+CORS_ORIGIN_ALLOW_ALL = True  
 
 # ckeditor configurations
 CKEDITOR_CONFIGS = {
