@@ -18,4 +18,6 @@ urlpatterns = [
     path("json-minify", frontend_views.JSONMinifierView.as_view()),
     path("xml-to-json", frontend_views.XMLToJSONView.as_view()),
     path("json-to-xml", frontend_views.JSONToXMLView.as_view()),
+    path("csv-to-json", frontend_views.CSVToJSONView.as_view()),
+    path("json-to-text", frontend_views.JSONToTextView.as_view()),
 ]
