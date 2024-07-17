@@ -3,6 +3,7 @@ import json
 from xml.etree import ElementTree as ET
 
 import jsbeautifier
+import xmltodict
 from bs4 import BeautifulSoup
 from cssbeautifier import beautify
 from cssmin import cssmin
@@ -177,49 +178,27 @@ class XMLToJSONView(APIView):
       return Response({'content': 'Missing XML data'}, )
 
     try:
-      # Parse the XML data
-      root = ET.fromstring(xml_data)
-    except ET.ParseError as e:
-      return Response({'content': f'Invalid XML data: {str(e)}'}, )
+        json_data = xmltodict.parse(xml_data)
+    except Exception as e:
+      return Response({'content': f'Invalid XML data: {str(e)}'} )
 
-    # Convert the XML element tree to a dictionary
-    json_data = self.xml_to_dict(root)
-
-    # Return the JSON data
     return Response({'content': json.dumps(json_data)})
 
-  def xml_to_dict(self, xml_element):
-    """
-    Recursive function to convert an XML element to a Python dictionary
-    """
-    tag = xml_element.tag
-    text = xml_element.text
-    attributes = xml_element.attrib
 
-    # Handle child elements
-    children = []
-    for child in xml_element:
-      child_data = self.xml_to_dict(child)
-      if isinstance(child_data, list):
-        children.extend(child_data)
-      else:
-        children.append(child_data)
+class JSONToXMLView(APIView):
+  def post(self, request:Request):
+    json_data = request.data.get('json')
+    if not json_data:
+      return Response({'content': 'Missing JSON data'}, )
 
-    # Construct the dictionary
-    if children:
-      if text:
-        data = {'text': text, 'children': children}
-      else:
-        data = children
-    else:
-      if text:
-        data = text
-      else:
-        data = attributes
+    try:
+      # Parse the JSON data
+      data = json.loads(json_data)
+    except json.JSONDecodeError as e:
+      return Response({'content': f'Invalid JSON data: {str(e)}'}, )
 
-    return {tag: data}
-
-
+    return Response({'content': xmltodict.unparse(data)})
+   
 
 
 class CSVToJSONView(APIView):
@@ -284,71 +263,6 @@ class TSVToJSONView(APIView):
 
     # Return the JSON data
     return Response({'content': json.dumps(json_data)})
-
-
-
-
-class JSONToXMLView(APIView):
-  def post(self, request:Request):
-    # Get the JSON data from the request body
-    json_data = request.data.get('json')
-    if not json_data:
-      return Response({'content': 'Missing JSON data'}, )
-
-    try:
-      # Parse the JSON data
-      data = json.loads(json_data)
-    except json.JSONDecodeError as e:
-      return Response({'content': f'Invalid JSON data: {str(e)}'}, )
-
-    # Convert the JSON data to an XML element tree
-    root = self.json_to_xml(data)
-
-    # Generate the XML string from the element tree
-    xml_data = ET.tostring(root, encoding='utf-8').decode('utf-8')
-
-    # Return the XML data
-    return Response({'content': xml_data})
-
-  def json_to_xml(self, data):
-    """
-    Recursive function to convert a Python dictionary to an XML element tree
-    """
-    if isinstance(data, (str, int, float, bool)):
-      print(data)
-      return ET.Element('value', data)  # Handle basic data types
-    elif isinstance(data, list):
-      # Create a parent element for the list
-      parent = ET.Element(self.get_tag_name(data))
-      # Convert each item in the list to an XML element and append to parent
-      for item in data:
-        child = self.json_to_xml(item)
-        parent.append(child)
-      return parent
-    elif isinstance(data, dict):
-      # Create a parent element for the dictionary
-      parent = ET.Element(self.get_tag_name(data))
-      # Convert each key-value pair to a child element and append to parent
-      for key, value in data.items():
-        child = self.json_to_xml(value)
-        child.tag = key  # Set the element tag to the key
-        parent.append(child)
-      return parent
-    else:
-      # Handle unsupported data types (optional: raise exception or return empty element)
-      return ET.Element('unsupported_type')  # Placeholder for unsupported types
-
-  def get_tag_name(self, data):
-    """
-    Function to determine the tag name for a list or dictionary (optional)
-    """
-    # You can customize the logic here to generate meaningful tag names
-    # Based on your data structure or key names in the dictionary
-    if isinstance(data, list):
-      return 'item'  # Default tag name for list elements
-    elif isinstance(data, dict):
-      return 'data'  # Default tag name for dictionary elements (can be customized)
-    return 'element'  # Default fallback
 
 
 
