@@ -10,7 +10,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .lib.helpers import loop_in_chunks
+from ..lib.helpers import loop_in_chunks
 
 
 class ExtractPDFTextView(APIView):
