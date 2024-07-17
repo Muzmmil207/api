@@ -13,4 +13,9 @@ urlpatterns = [
     path("css-minifier", frontend_views.CSSMinifierView.as_view()),
     path("javascript-minifier", frontend_views.JavaScriptMinifierView.as_view()),
     path("javascript-beautifier", frontend_views.JavaScriptBeautifierView.as_view()),
+    path("json-formatter", frontend_views.JSONFormatterView.as_view()),
+    path("json-validator", frontend_views.JSONValidatorView.as_view()),
+    path("json-minify", frontend_views.JSONMinifierView.as_view()),
+    path("xml-to-json", frontend_views.XMLToJSONView.as_view()),
+    path("json-to-xml", frontend_views.JSONToXMLView.as_view()),
 ]
