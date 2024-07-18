@@ -266,20 +266,23 @@ class JSONToTextView(APIView):
 class CSVToJSONView(APIView):
     def post(self, request: Request):
         # Get the CSV data from the request body
-        csv_data = request.data.get("csv")
-        if not csv_data:
+        csv_file = request.data.get("files")
+        if not csv_file:
             return Response(
                 {"content": "Missing CSV data"},
             )
 
         try:
             # Read the CSV data from a string (assuming it's sent as a string)
-            reader = csv.reader(csv.StringIO(csv_data))
+            reader = csv.reader(csv.StringIO(csv_file.read().decode("utf-8")))
             # Extract the header row (optional)
-            headers = next(reader)
-
-            # Convert CSV rows to dictionaries
             json_data = []
+            try:
+                headers = next(reader)
+            except StopIteration:
+                pass
+            
+            # Convert CSV rows to dictionaries
             for row in reader:
                 if headers:
                     # Create a dictionary using headers and row values
@@ -296,53 +299,18 @@ class CSVToJSONView(APIView):
         # Return the JSON data
         return Response({"content": json.dumps(json_data)})
 
-
-class TSVToJSONView(APIView):
-    def post(self, request: Request):
-        # Get the TSV data from the request body
-        tsv_data = request.data.get("tsv")
-        if not tsv_data:
-            return Response(
-                {"content": "Missing TSV data"},
-            )
-
-        try:
-            # Read the TSV data from a string (assuming it's sent as a string)
-            reader = csv.reader(csv.StringIO(tsv_data), delimiter="\t")  # Specify tab delimiter
-            # Extract the header row (optional)
-            headers = next(reader)
-
-            # Convert TSV rows to dictionaries
-            json_data = []
-            for row in reader:
-                if headers:
-                    # Create a dictionary using headers and row values
-                    json_data.append(dict(zip(headers, row)))
-                else:
-                    # Create a dictionary with numeric keys (if no headers)
-                    json_data.append(dict(enumerate(row)))
-
-        except csv.Error as e:
-            return Response(
-                {"content": f"Invalid TSV data: {str(e)}"},
-            )
-
-        # Return the JSON data
-        return Response({"content": json.dumps(json_data)})
-
-
 class JSONToCSVView(APIView):
     def post(self, request: Request):
         # Get the JSON data from the request body
-        json_data = request.data.get("json")
-        if not json_data:
+        json_file = request.data.get("files")
+        if not json_file:
             return Response(
                 {"content": "Missing JSON data"},
             )
 
         try:
             # Parse the JSON data
-            data = json.loads(json_data)
+            data = json.loads(json_file)
         except json.JSONDecodeError as e:
             return Response(
                 {"content": f"Invalid JSON data: {str(e)}"},
@@ -372,6 +340,43 @@ class JSONToCSVView(APIView):
 
         # Return the CSV data
         return Response({"content": csv_data})
+
+
+class TSVToJSONView(APIView):
+    def post(self, request: Request):
+        # Get the TSV data from the request body
+        tsv_file = request.data.get("files")
+        if not tsv_file:
+            return Response(
+                {"content": "Missing TSV data"},
+            )
+
+        try:
+            # Read the TSV data from a string (assuming it's sent as a string)
+            reader = csv.reader(csv.StringIO(tsv_file.read().decode("utf-8")), delimiter="\t")  # Specify tab delimiter
+            # Extract the header row (optional)
+            try:
+                headers = next(reader)
+            except StopIteration:
+                pass
+            
+            # Convert TSV rows to dictionaries
+            json_data = []
+            for row in reader:
+                if headers:
+                    # Create a dictionary using headers and row values
+                    json_data.append(dict(zip(headers, row)))
+                else:
+                    # Create a dictionary with numeric keys (if no headers)
+                    json_data.append(dict(enumerate(row)))
+
+        except csv.Error as e:
+            return Response(
+                {"content": f"Invalid TSV data: {str(e)}"},
+            )
+
+        # Return the JSON data
+        return Response({"content": json.dumps(json_data)})
 
 
 class JSONToTSVView(APIView):
