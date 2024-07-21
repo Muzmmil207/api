@@ -66,15 +66,15 @@ class WebPToJpgConverter(APIView):
     def post(self, request:Request):
         try:
             # Get WebP data from request (replace 'webp_data' with actual field name)
-            webp_data = request.FILES.get("webp_data")
+            webp_data = request.data.get("files")
             if not webp_data or not webp_data.content_type.startswith("image/webp"):
                 return Response({"error": "Invalid WebP file"})
 
             # Read WebP data into a BytesIO object
-            webp_buffer = BytesIO(webp_data.read())
-
+            # webp_buffer = BytesIO(webp_data.read())
+            # print(webp_data.read())
             # Decode WebP image using webp or pillow-webp library
-            webp_image = webp.load_image(webp_buffer)  # Adjust based on your chosen library
+            webp_image = webp.WebPData.from_buffer(webp_data.read())  # Adjust based on your chosen library
 
             # Prepare a BytesIO object for the output JPG image
             jpg_buffer = BytesIO()
@@ -84,7 +84,7 @@ class WebPToJpgConverter(APIView):
             jpg_image.save(jpg_buffer, format="JPEG", quality=80)  # Adjust quality as needed
 
             # Prepare response with converted JPG data (base64 encoding)
-            response_data = {"jpg_data": base64.b64encode(jpg_buffer.getvalue()).decode("utf-8")}
+            response_data = {"content": base64.b64encode(jpg_buffer.getvalue()).decode("utf-8")}
             return Response(response_data)
         except Exception as e:
             print(f"Error converting WebP: {e}")
