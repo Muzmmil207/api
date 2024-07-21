@@ -12,39 +12,34 @@ from PIL import Image
 from rest_framework import status
 from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
 class IcoToPngConverter(APIView):
-    def post(self, request, format=None):
+    def post(self, request:Request):
         try:
             # Get ICO data from request (replace 'ico_data' with actual field name)
-            ico_data = request.FILES.get("ico")
+            ico_data = request.data.get("files")
             if not ico_data:
                 return Response({"error": "Invalid ICO file"})
 
-            # Read ICO data using icoreader
-            reader = "icoreader".Reader(ico_data)
-            # Assuming you want the first icon in the ICO file
-            first_icon = reader.read(0)  # Adjust index for specific icon
-
-            # Convert ICO image to PNG format
-            png_image = first_icon.as_  # PIL.Image()  # Assuming using Pillow for PNG conversion
-
+            png_image = Image.open(ico_data)
+            buffer = BytesIO()
+            png_image.save(buffer,format="PNG")
             # Prepare response with converted PNG data (base64 encoding)
-            response_data = {"png_data": base64.b64encode(png_image.getvalue()).decode("utf-8")}
+            response_data = {"content": f'data:image/png;base64,{base64.b64encode(buffer.getbuffer()).decode("utf-8")}'}
             return Response(response_data)
         except Exception as e:
             print(f"Error converting ICO: {e}")
             return Response(
-                {"error": "There was an error converting the ICO file."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                {"error": "There was an error converting the ICO file."}
             )
 
 
 class JpgToPngConverter(APIView):
-    def post(self, request, format=None):
+    def post(self, request:Request):
         try:
             # Get JPG data from request (replace 'jpg_data' with actual field name)
             jpg_data = request.FILES.get("jpg_data")
@@ -68,7 +63,7 @@ class JpgToPngConverter(APIView):
 
 
 class WebPToJpgConverter(APIView):
-    def post(self, request, format=None):
+    def post(self, request:Request):
         try:
             # Get WebP data from request (replace 'webp_data' with actual field name)
             webp_data = request.FILES.get("webp_data")
@@ -100,7 +95,7 @@ class WebPToJpgConverter(APIView):
 
 
 class PngToWebPConverter(APIView):
-    def post(self, request, format=None):
+    def post(self, request:Request):
         try:
             # Get PNG data from request (replace 'png_data' with actual field name)
             png_data = request.FILES.get("png_data")
