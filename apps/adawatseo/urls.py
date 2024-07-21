@@ -1,9 +1,9 @@
 from django.urls import include, path
 
-from .views import frontend_views, pdf_views
+from .views import frontend_views, images_views, pdf_views
 
 urlpatterns = [
-    #PDF
+    # PDF
     path("pdf-to-text", pdf_views.ExtractPDFTextView.as_view()),
     path("text-to-pdf", pdf_views.TextToPDFView.as_view()),
     # Frontend
@@ -22,4 +22,26 @@ urlpatterns = [
     path("csv-to-json", frontend_views.CSVToJSONView.as_view()),
     path("json-to-csv", frontend_views.JSONToCSVView.as_view()),
     path("tsv-to-json", frontend_views.TSVToJSONView.as_view()),
+    # Images
+    # path("image-converter",images_views.IcoToPngConverter.as_view()),
+    # path("ico-converter", images_views.IcoToPngConverter.as_view()),
+    # path("image-flipper",images_views.IcoToPngConverter.as_view()),
+    # path("rotate-image",images_views.IcoToPngConverter.as_view()),
+    # path("image-enlarger",images_views.IcoToPngConverter.as_view()),
+    # path("image-cropper",images_views.IcoToPngConverter.as_view()),
+    # path("image-resizer",images_views.IcoToPngConverter.as_view()),
+    path("ico-to-png",images_views.IcoToPngConverter.as_view()),
+    # path("jpg-to-png",images_views.IcoToPngConverter.as_view()),
+    # path("png-to-jpg",images_views.IcoToPngConverter.as_view()),
+    # path("jpg-converter",images_views.IcoToPngConverter.as_view()),
+    # path("webp-to-jpg",images_views.IcoToPngConverter.as_view()),
+    # path("png-to-webp",images_views.IcoToPngConverter.as_view()),
+    # path("png-to-bmp",images_views.IcoToPngConverter.as_view()),
+    # path("png-to-gif",images_views.IcoToPngConverter.as_view()),
+    # path("png-to-ico",images_views.IcoToPngConverter.as_view()),
+    # path("jpg-to-webp",images_views.IcoToPngConverter.as_view()),
+    # path("jpg-to-bmp",images_views.IcoToPngConverter.as_view()),
+    # path("jpg-to-gif",images_views.IcoToPngConverter.as_view()),
+    # path("jpg-to-ico",images_views.IcoToPngConverter.as_view()),
+    # path("webp-to-png",images_views.IcoToPngConverter.as_view()),
 ]
