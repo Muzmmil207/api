@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import frontend_views, images_views, pdf_views
+from .views import frontend_views, images_views, passwords_views, pdf_views
 
 urlpatterns = [
     # PDF
@@ -42,4 +42,6 @@ urlpatterns = [
     # path("jpg-to-gif",images_views.IcoToPngConverter.as_view()),
     # path("jpg-to-ico",images_views.IcoToPngConverter.as_view()),
     # path("webp-to-png",images_views.IcoToPngConverter.as_view()),
+    # Password
+    path("password-strength-checker",passwords_views.PasswordValidator.as_view()),
 ]
