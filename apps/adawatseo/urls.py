@@ -30,9 +30,9 @@ urlpatterns = [
     # path("image-enlarger",images_views.IcoToPngConverter.as_view()),
     # path("image-cropper",images_views.IcoToPngConverter.as_view()),
     # path("image-resizer",images_views.IcoToPngConverter.as_view()),
-    path("ico-to-png",images_views.IcoToPngConverter.as_view()),
+    path("ico-to-png", images_views.IcoToPngConverter.as_view()),
     # path("jpg-converter",images_views.IcoToPngConverter.as_view()),
-    path("webp-to-jpg",images_views.WebPToJpgConverter.as_view()),
+    path("webp-to-jpg", images_views.WebPToJpgConverter.as_view()),
     # path("png-to-webp",images_views.IcoToPngConverter.as_view()),
     # path("png-to-bmp",images_views.IcoToPngConverter.as_view()),
     # path("png-to-gif",images_views.IcoToPngConverter.as_view()),
@@ -43,5 +43,6 @@ urlpatterns = [
     # path("jpg-to-ico",images_views.IcoToPngConverter.as_view()),
     # path("webp-to-png",images_views.IcoToPngConverter.as_view()),
     # Password
-    path("password-strength-checker",passwords_views.PasswordValidator.as_view()),
+    path("password-strength-checker", passwords_views.PasswordValidator.as_view()),
+    path("password-encryption", passwords_views.PasswordEncryptionView.as_view()),
 ]
