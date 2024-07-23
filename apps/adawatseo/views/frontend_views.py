@@ -420,3 +420,21 @@ class JSONToTSVView(APIView):
 
         # Return the TSV data
         return Response({"content": tsv_data})
+
+
+
+class HTMLToTextView(APIView):
+    def post(self, request: Request):
+        # Get the HTML content from the request body
+        html_content = request.data.get("html")
+        if not html_content:
+            return Response(
+                {"error": "Missing HTML content"},
+            )
+
+        # Use BeautifulSoup to beautify the HTML
+        soup = BeautifulSoup(html_content, "html.parser")
+        html_text = BeautifulSoup(soup.prettify(), "html.parser").text
+
+        # Return the beautified HTML
+        return Response({"content": html_text})

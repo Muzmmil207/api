@@ -22,6 +22,7 @@ urlpatterns = [
     path("csv-to-json", frontend_views.CSVToJSONView.as_view()),
     path("json-to-csv", frontend_views.JSONToCSVView.as_view()),
     path("tsv-to-json", frontend_views.TSVToJSONView.as_view()),
+    path("html-to-text", frontend_views.HTMLToTextView.as_view()),
     # Images
     # path("image-converter",images_views.IcoToPngConverter.as_view()),
     # path("ico-converter", images_views.IcoToPngConverter.as_view()),
